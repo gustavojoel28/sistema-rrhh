@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->decimal('sueldo_base', 10, 2)->nullable(); // 💡 CRÍTICO: Sueldo Base mensual
+            $table->string('estado', 20)->default('Activo');
         });
     }
 

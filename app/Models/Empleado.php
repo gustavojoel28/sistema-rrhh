@@ -17,6 +17,7 @@ class Empleado extends Model
         'area_id',
         'cargo_id',
         'fecha_ingreso',
+        'sueldo_base',
         'estado',
     ];
 

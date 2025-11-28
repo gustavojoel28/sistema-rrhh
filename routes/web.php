@@ -13,6 +13,8 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\ConceptoPlanillaController;
+use App\Http\Controllers\PlanillaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +86,21 @@ Route::get('/permisos/{id}/aprobar', [PermisoController::class, 'aprobar'])
 
 Route::get('/permisos/{id}/rechazar', [PermisoController::class, 'rechazar'])
     ->name('permisos.rechazar');
+/*
+|--------------------------------------------------------------------------
+| PLANILLAS
+|--------------------------------------------------------------------------
+*/
+Route::resource('conceptos', ConceptoPlanillaController::class);
+
+Route::get('/planillas/generar', [PlanillaController::class, 'create'])
+    ->name('planillas.create'); // Usamos create para la vista del formulario
+
+Route::post('/planillas/generar', [PlanillaController::class, 'generarPlanilla'])
+    ->name('planillas.generar');
+
+Route::get('/planillas', [PlanillaController::class, 'index'])
+    ->name('planillas.index');
+
+Route::get('/planillas/{mes_anio}', [PlanillaController::class, 'show'])
+    ->name('planillas.show');
