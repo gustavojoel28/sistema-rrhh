@@ -120,7 +120,25 @@
         <a href="{{ route('empleados.index') }}">
             <i class="bi bi-person-badge"></i> Empleados
         </a>
-    </div>
+
+        <hr class="dropdown-divider my-2" style="background: rgba(255, 255, 255, 0.2);">
+
+        <a href="{{ route('asistencias.index') }}">
+            <i class="bi bi-calendar-check"></i> Asistencias
+        </a>
+
+        <a href="{{ route('permisos.index') }}">
+            <i class="bi bi-file-earmark-text"></i> Permisos
+        </a>
+
+        <a href="{{ route('planillas.index') }}">
+            <i class="bi bi-currency-dollar"></i> Planillas
+        </a>
+
+        <a href="{{ route('conceptos.index') }}">
+            <i class="bi bi-gear"></i> Configuración Planilla
+        </a>
+  </div>
 
     <!-- CONTENIDO -->
     <div class="content">
