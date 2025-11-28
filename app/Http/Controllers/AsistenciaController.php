@@ -13,7 +13,9 @@ class AsistenciaController extends Controller
     public function index()
     {
         $asistencias = Asistencia::with('empleado')->latest()->paginate(10);
-        return view('asistencias.index', compact('asistencias'));
+        $empleados = Empleado::all();
+
+        return view('asistencias.index', compact('asistencias', 'empleados'));
     }
 
     // MARCAR ENTRADA
@@ -52,6 +54,7 @@ class AsistenciaController extends Controller
         ]);
 
         $hoy = Carbon::today()->toDateString();
+        $horaSalida = Carbon::now();
 
         $registro = Asistencia::where('empleado_id', $request->empleado_id)
             ->where('fecha', $hoy)
@@ -65,10 +68,17 @@ class AsistenciaController extends Controller
             return back()->with('error', 'La salida ya fue registrada.');
         }
 
+        $horaEntrada = Carbon::parse($registro->hora_entrada);
+
+        $diferenciaMinutos = $horaSalida->diffInMinutes($horaEntrada);
+
+        $duracionHorasDecimal = round($diferenciaMinutos / 60, 2);
+
         $registro->update([
-            'hora_salida' => Carbon::now()->format('H:i:s')
+            'hora_salida' => $horaSalida->format('H:i:s'),
+            'duracion' => $duracionHorasDecimal
         ]);
 
-        return back()->with('success', 'Salida registrada correctamente.');
+        return back()->with('success', 'Salida registrada correctamente. Duración: ' . $duracionHorasDecimal . ' horas.');
     }
 }

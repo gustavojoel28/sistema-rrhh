@@ -17,7 +17,7 @@
         @csrf
         <label>Empleado:</label>
         <select name="empleado_id" class="form-control d-inline w-25" required>
-            @foreach(\App\Models\Empleado::all() as $empleado)
+            @foreach($empleados as $empleado)
                 <option value="{{ $empleado->id }}">{{ $empleado->nombres }} {{ $empleado->apellidos }}</option>
             @endforeach
         </select>
@@ -27,7 +27,7 @@
     <form action="{{ route('asistencias.salida') }}" method="POST" class="d-inline ms-3">
         @csrf
         <select name="empleado_id" class="form-control d-inline w-25" required>
-            @foreach(\App\Models\Empleado::all() as $empleado)
+            @foreach($empleados as $empleado)
                 <option value="{{ $empleado->id }}">{{ $empleado->nombres }} {{ $empleado->apellidos }}</option>
             @endforeach
         </select>
@@ -43,6 +43,7 @@
                 <th>Fecha</th>
                 <th>Entrada</th>
                 <th>Salida</th>
+                <th>Duración</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -53,6 +54,7 @@
                 <td>{{ $a->fecha }}</td>
                 <td>{{ $a->hora_entrada }}</td>
                 <td>{{ $a->hora_salida ?? '-' }}</td>
+                <td>{{ $a->duracion ?? '-' }}</td> {{-- 💡 CRÍTICO: Mostrar Duración --}}
                 <td>
                     @if($a->estado == 'Presente')
                         <span class="badge bg-success">Presente</span>

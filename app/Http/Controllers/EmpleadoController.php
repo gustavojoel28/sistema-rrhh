@@ -53,7 +53,10 @@ class EmpleadoController extends Controller
 
     public function edit(Empleado $empleado)
     {
-        //
+        $areas = Area::all();
+        $cargos = Cargo::all();
+
+        return view('empleados.edit', compact('empleado', 'areas', 'cargos'));
     }
 
     /**

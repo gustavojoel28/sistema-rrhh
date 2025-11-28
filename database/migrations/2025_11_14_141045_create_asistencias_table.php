@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('hora_entrada')->nullable();
             $table->time('hora_salida')->nullable();
             $table->string('estado', 20)->default('Presente');
+            $table->decimal('duracion', 4, 2)->nullable();
 
             $table->timestamps();
 
