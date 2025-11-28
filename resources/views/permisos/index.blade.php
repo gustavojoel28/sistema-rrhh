@@ -27,24 +27,48 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($permisos as $permiso)
+            @foreach($permisos as $p)
             <tr>
-                <td>{{ $permiso->empleado->nombres }} {{ $permiso->empleado->apellidos }}</td>
-                <td>{{ $permiso->tipo }}</td>
-                <td>{{ $permiso->fecha_inicio }}</td>
-                <td>{{ $permiso->fecha_fin }}</td>
+                <td>{{ $p->empleado->nombres }} {{ $p->empleado->apellidos }}</td>
+                <td>{{ $p->tipo }}</td>
+                <td>{{ $p->fecha_inicio }}</td>
+                <td>{{ $p->fecha_fin }}</td>
                 <td>
-                    @if($permiso->estado == 'Pendiente')
-                        <span class="badge bg-warning text-dark">Pendiente</span>
-                    @elseif($permiso->estado == 'Aprobado')
+                    @if($p->estado == 'Aprobado')
                         <span class="badge bg-success">Aprobado</span>
-                    @else
+                    @elseif($p->estado == 'Rechazado')
                         <span class="badge bg-danger">Rechazado</span>
+                    @elseif ($p->estado == 'Permiso')
+                        <span class="badge bg-info">Permiso</span>
+                    @else
+                        <span class="badge bg-warning text-dark">{{ $p->estado }}</span>
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('permisos.aprobar', $permiso->id) }}" class="btn btn-success btn-sm">Aprobar</a>
-                    <a href="{{ route('permisos.rechazar', $permiso->id) }}" class="btn btn-danger btn-sm">Rechazar</a>
+                    {{-- 💡 CRÍTICO: Mostrar botones solo si el estado es Pendiente --}}
+                    @if($p->estado == 'Pendiente')
+                        {{-- Botón Aprobar --}}
+                        <form action="{{ route('permisos.aprobar', $p) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-success" title="Aprobar Permiso">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                        </form>
+
+                        {{-- Botón Rechazar --}}
+                        <form action="{{ route('permisos.rechazar', $p) }}" method="POST" class="d-inline ms-1">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger" title="Rechazar Permiso" onclick="return confirm('¿Está seguro de rechazar este permiso?')">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </form>
+                    @endif
+
+                    {{-- Historial (Si el empleado tiene muchos permisos) --}}
+                    <a href="{{ route('permisos.historial', $p->empleado_id) }}" class="btn btn-sm btn-primary ms-1">
+                        <i class="bi bi-clock-history"></i>
+                    </a>
+
                 </td>
             </tr>
             @endforeach

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permiso;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class PermisoController extends Controller
 {
     public function index()
@@ -41,17 +41,49 @@ class PermisoController extends Controller
             ->with('success', 'Solicitud registrada correctamente.');
     }
 
-    public function aprobar($id)
+    public function aprobar(Permiso $permiso)
     {
-        $permiso = Permiso::findOrFail($id);
         $permiso->update(['estado' => 'Aprobado']);
 
-        return back()->with('success', 'El permiso fue aprobado.');
+        $fechaInicio = Carbon::parse($permiso->fecha_inicio);
+        $fechaFin = Carbon::parse($permiso->fecha_fin);
+        // Itera sobre cada día cubierto por el permiso
+        for ($fecha = $fechaInicio->copy(); $fecha->lte($fechaFin); $fecha->addDay()) {
+
+            $diaString = $fecha->toDateString();
+
+            // Busca si ya existe un registro de asistencia para este empleado en esta fecha
+            $asistencia = \App\Models\Asistencia::where('empleado_id', $permiso->empleado_id)
+                ->where('fecha', $diaString)
+                ->first();
+
+            if ($asistencia) {
+                // Si existe y tiene un estado de 'Falta' (o no tiene registro de entrada/salida)
+                // Esto sobrescribe cualquier "Falta" registrada o automática.
+                if ($asistencia->estado == 'Falta' || is_null($asistencia->hora_entrada)) {
+                    $asistencia->update([
+                        'estado' => 'Permiso',
+                        'hora_entrada' => null,
+                        'hora_salida' => null,
+                    ]);
+                }
+
+            } else {
+                // Si no existe, creamos el registro de 'Permiso' para que la Planilla lo contabilice
+                \App\Models\Asistencia::create([
+                    'empleado_id' => $permiso->empleado_id,
+                    'fecha' => $diaString,
+                    'hora_entrada' => null,
+                    'hora_salida' => null,
+                    'estado' => 'Permiso' // Nuevo estado
+                ]);
+            }
+        }
+        return back()->with('success', 'El permiso fue aprobado. Proceda con la gestión de Asistencia si es necesario.');
     }
 
-    public function rechazar($id)
+    public function rechazar(Permiso $permiso)
     {
-        $permiso = Permiso::findOrFail($id);
         $permiso->update(['estado' => 'Rechazado']);
 
         return back()->with('success', 'El permiso fue rechazado.');

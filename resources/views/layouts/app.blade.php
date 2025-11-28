@@ -121,7 +121,6 @@
             <i class="bi bi-person-badge"></i> Empleados
         </a>
 
-        <hr class="dropdown-divider my-2" style="background: rgba(255, 255, 255, 0.2);">
 
         <a href="{{ route('asistencias.index') }}">
             <i class="bi bi-calendar-check"></i> Asistencias

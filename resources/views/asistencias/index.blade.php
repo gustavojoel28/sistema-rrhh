@@ -60,6 +60,8 @@
                         <span class="badge bg-success">Presente</span>
                     @elseif($a->estado == 'Tardanza')
                         <span class="badge bg-warning text-dark">Tardanza</span>
+                    @elseif($a->estado == 'Permiso')
+                        <span class="badge bg-info">Permiso Aprobado</span>
                     @else
                         <span class="badge bg-danger">Falta</span>
                     @endif

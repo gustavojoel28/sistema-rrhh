@@ -104,3 +104,9 @@ Route::get('/planillas', [PlanillaController::class, 'index'])
 
 Route::get('/planillas/{mes_anio}', [PlanillaController::class, 'show'])
     ->name('planillas.show');
+// Ejemplo para routes/web.php
+Route::post('/permisos/{permiso}/aprobar', [PermisoController::class, 'aprobar'])
+    ->name('permisos.aprobar');
+
+Route::post('/permisos/{permiso}/rechazar', [PermisoController::class, 'rechazar'])
+    ->name('permisos.rechazar');
