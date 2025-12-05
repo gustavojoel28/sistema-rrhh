@@ -137,21 +137,34 @@
         <a href="{{ route('conceptos.index') }}">
             <i class="bi bi-gear"></i> Configuración Planilla
         </a>
+        <a href="{{ route('reportes.index') }}">
+            <i class="bi bi-file-earmark-bar-graph"></i> Reportes e Indicadores RRHH
+        </a>
   </div>
 
     <!-- CONTENIDO -->
     <div class="content">
 
-        <div class="topbar">
-            <h4 class="m-0"><i class="bi bi-grid"></i> Panel Administrativo</h4>
+    <div class="topbar">
+        <h4 class="m-0"><i class="bi bi-grid"></i> Panel Administrativo</h4>
 
-            <!-- BOTÓN MODO OSCURO / CLARO -->
-            <button id="toggleDarkMode" class="btn btn-dark">
+        <div class="d-flex align-items-center">
+            <!-- BOTÓN MODO OSCURO / CLARO (Ya existente) -->
+            <button id="toggleDarkMode" class="btn btn-dark me-3">
                 <i class="bi bi-moon-stars"></i>
             </button>
-        </div>
 
-        @yield('content')
+            {{-- 💡 BOTÓN DE LOGOUT AÑADIDO --}}
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @yield('content')
 
     </div>
 

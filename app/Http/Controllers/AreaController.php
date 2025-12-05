@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
+    public function __construct()
+    {
+        // Solo permite el acceso al rol 'Administrador RRHH'
+        $this->middleware('role:Administrador RRHH');
+    }
+
     public function index()
     {
         $areas = Area::all();

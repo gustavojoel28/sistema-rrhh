@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('role:Administrador RRHH');
+    }
     public function index()
     {
         $cargos = Cargo::with('area')->get();

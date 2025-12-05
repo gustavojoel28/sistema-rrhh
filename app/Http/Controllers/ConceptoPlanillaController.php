@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ConceptoPlanillaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:Administrador RRHH');
+    }
     public function index()
     {
         $conceptos = ConceptoPlanilla::all();

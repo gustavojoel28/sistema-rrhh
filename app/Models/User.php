@@ -2,31 +2,32 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles; // Importar el Trait de Spatie
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles; // Usar el Trait y notificaciones
 
     /**
-     * The attributes that are mass assignable.
+     * Los atributos que son asignables en masa.
+     * Incluye empleado_id para la vinculación con el personal.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'empleado_id', // 💡 CRÍTICO: Añadido para permitir asignar el ID del empleado
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Los atributos que deben ser ocultados para las serializaciones.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -34,15 +35,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Relación: Un Usuario pertenece a un Empleado (1:1)
+     * Esto vincula la cuenta de login con la ficha de RRHH.
      */
-    protected function casts(): array
+    public function empleado()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        // 💡 CLAVE: Usa la columna 'empleado_id' que acabamos de agregar en la migración
+        return $this->belongsTo(Empleado::class);
     }
 }

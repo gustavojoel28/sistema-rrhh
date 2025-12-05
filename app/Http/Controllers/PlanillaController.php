@@ -11,6 +11,10 @@ use Carbon\Carbon;
 
 class PlanillaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:Administrador RRHH');
+    }
     // Muestra el listado de planillas ya generadas (por mes/año)
     public function index()
     {

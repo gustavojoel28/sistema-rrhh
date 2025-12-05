@@ -9,6 +9,10 @@ use App\Models\Area;
 
 class EmpleadoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:Administrador RRHH');
+    }
     /**
      * Display a listing of the resource.
      */
